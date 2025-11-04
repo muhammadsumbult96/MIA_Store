@@ -1,159 +1,78 @@
-# MÍA E-Commerce Platform
+# MÍA E-Commerce Website
 
-A high-performance, scalable e-commerce platform built with modern technologies following DRY and SOLID principles.
+A modern, responsive e-commerce website built with Next.js, TypeScript, and Tailwind CSS.
+
+## Features
+
+- **Product Catalog**: Browse products across multiple categories (Electronics, Fashion, Home & Living, Sports)
+- **Advanced Filtering**: Filter by category, price range, rating, and search
+- **Shopping Cart**: Add items to cart with persistent storage
+- **Product Details**: Detailed product pages with image zoom
+- **Responsive Design**: Fully responsive across mobile, tablet, and desktop
+- **Toast Notifications**: User-friendly notifications for cart actions
+- **Smooth Animations**: Modern UI with smooth transitions and hover effects
 
 ## Tech Stack
 
-### Frontend
-- **Next.js 14+** with App Router and TypeScript
-- **Tailwind CSS** for styling
-- **Vitest** for unit testing
-- **React Hook Form + Zod** for form validation
-- **Framer Motion** for animations
-- **Axios** for API communication
-
-### Backend
-- **FastAPI** with Python 3.12
-- **SQLAlchemy** (async) with PostgreSQL
-- **Pydantic** for data validation
-- **JWT** for authentication
-- **Pytest** for testing
-- **UV** for dependency management
-
-## Project Structure
-
-```
-Mia/
-├── frontend/          # Next.js application
-├── service-1/        # FastAPI backend
-├── docs/             # Documentation
-└── .github/          # CI/CD workflows
-```
+- **Framework**: Next.js 16 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Testing**: Vitest
+- **Code Quality**: ESLint, Prettier
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm/yarn
-- Python 3.12
-- PostgreSQL 14+
-- UV (Python package manager)
+- Node.js 18+ and npm
 
-### Frontend Setup
+### Installation
+
+1. Install dependencies:
 
 ```bash
-cd frontend
 npm install
+```
+
+2. Run the development server:
+
+```bash
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:3000`
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Backend Setup
+### Available Scripts
 
-1. Install UV if not already installed:
-```bash
-pip install uv
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run test` - Run tests
+- `npm run test:coverage` - Run tests with coverage
+
+## Project Structure
+
+```
+src/
+  app/              # Next.js app router pages
+  components/       # React components
+    ui/            # Reusable UI components
+    layout/        # Layout components
+    product/       # Product-related components
+    cart/          # Cart components
+  lib/
+    utils/         # Utility functions
+    types/         # TypeScript types
+    constants/     # Constants and mock data
+  hooks/           # Custom React hooks
+  test/            # Test setup files
 ```
 
-2. Set up the backend:
-```bash
-cd service-1
-uv venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -r requirements.txt
-```
+## Development Guidelines
 
-3. Create a `.env` file from `.env.example`:
-```bash
-cp .env.example .env
-```
-
-4. Update `.env` with your database credentials and secret key.
-
-5. Run database migrations (when Alembic is configured):
-```bash
-alembic upgrade head
-```
-
-6. Start the backend server:
-```bash
-uvicorn app.main:app --reload
-```
-
-The API will be available at `http://localhost:8000`
-API documentation at `http://localhost:8000/docs`
-
-## Development
-
-### Running Tests
-
-**Frontend:**
-```bash
-cd frontend
-npm run test
-npm run test:coverage
-```
-
-**Backend:**
-```bash
-cd service-1
-pytest
-pytest --cov
-```
-
-### Code Quality
-
-**Frontend:**
-- ESLint for linting
-- Prettier for formatting
-
-**Backend:**
-- Ruff for linting
-- Black for formatting
-
-## Environment Variables
-
-See `.env.example` files in each directory for required environment variables.
-
-## Contributing
-
-Please follow the coding standards defined in `docs/CODING_STANDARDS.md`.
-
-## API Documentation
-
-See [docs/API.md](docs/API.md) for detailed API documentation.
-
-## Deployment
-
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for deployment instructions.
-
-## Coding Standards
-
-See [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md) for coding conventions and best practices.
-
-## Project Status
-
-### Completed Features
-
-- ✅ User Authentication & Authorization (JWT)
-- ✅ Product Catalog with Search & Filtering
-- ✅ Shopping Cart Management
-- ✅ Checkout & Order Processing
-- ✅ Payment Integration (VNPay)
-- ✅ Order History & Tracking
-- ✅ Multi-language Support (Vietnamese, English)
-- ✅ Wishlist Functionality
-- ✅ Product Reviews & Ratings
-- ✅ Store Locator
-- ✅ Comprehensive Unit Tests
-
-### In Progress
-
-- 🔄 Admin Panel (Phase 2)
-- 🔄 Additional Payment Gateways (MoMo, ZaloPay)
-
-## License
-
-Copyright © 2024 MÍA E-Commerce Platform
-
+- Follow DRY and SOLID principles
+- Use TypeScript for all components
+- Write unit tests for utilities, hooks, and components
+- Ensure responsive design across all breakpoints
+- Follow the existing code style and patterns
