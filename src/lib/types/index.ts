@@ -12,6 +12,13 @@ export interface Product {
   reviewCount: number;
   inStock: boolean;
   tags?: string[];
+  sizes?: string[];
+  colors?: string[];
+  material?: string;
+  care?: string;
+  origin?: string;
+  sku?: string;
+  brand?: string;
 }
 
 export interface Category {
@@ -25,6 +32,18 @@ export interface CartItem {
   id: string;
   product: Product;
   quantity: number;
+  selectedSize?: string;
+  selectedColor?: string;
+}
+
+export interface Review {
+  id: string;
+  userId: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: string;
+  productId: string;
 }
 
 export interface Cart {
@@ -42,5 +61,14 @@ export interface FilterOptions {
   maxPrice?: number;
   minRating?: number;
   search?: string;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  slug: string;
+  productIds: string[];
 }
 

@@ -1,0 +1,140 @@
+import { Review } from '../types';
+
+export const sampleReviews: Record<string, Review[]> = {
+  '1': [
+    {
+      id: 'r1',
+      userId: 'u1',
+      userName: 'Sarah Johnson',
+      rating: 5,
+      comment: 'Absolutely love this dress! Perfect fit and the quality is amazing. Highly recommend!',
+      date: '2024-01-15',
+      productId: '1',
+    },
+    {
+      id: 'r2',
+      userId: 'u2',
+      userName: 'Emily Chen',
+      rating: 4,
+      comment: 'Beautiful dress, great quality. The only thing is it runs a bit small, so I would size up.',
+      date: '2024-01-10',
+      productId: '1',
+    },
+    {
+      id: 'r3',
+      userId: 'u3',
+      userName: 'Maria Garcia',
+      rating: 5,
+      comment: 'Stunning dress! Got so many compliments. The material is luxurious and the fit is perfect.',
+      date: '2024-01-05',
+      productId: '1',
+    },
+  ],
+  '3': [
+    {
+      id: 'r4',
+      userId: 'u4',
+      userName: 'James Wilson',
+      rating: 5,
+      comment: 'Best leather jacket I\'ve ever owned. Great quality and style. Worth every penny!',
+      date: '2024-01-12',
+      productId: '3',
+    },
+    {
+      id: 'r5',
+      userId: 'u5',
+      userName: 'Michael Brown',
+      rating: 4,
+      comment: 'Good quality leather, fits well. The only downside is it\'s a bit heavy, but that\'s expected for genuine leather.',
+      date: '2024-01-08',
+      productId: '3',
+    },
+  ],
+  '10': [
+    {
+      id: 'r6',
+      userId: 'u6',
+      userName: 'Lisa Anderson',
+      rating: 5,
+      comment: 'Perfect fit, very comfortable. The stretch material makes it easy to move around.',
+      date: '2024-01-14',
+      productId: '10',
+    },
+    {
+      id: 'r7',
+      userId: 'u7',
+      userName: 'Jennifer Lee',
+      rating: 4,
+      comment: 'Great jeans, good quality. The wash is nice and the fit is true to size.',
+      date: '2024-01-09',
+      productId: '10',
+    },
+  ],
+  '13': [
+    {
+      id: 'r8',
+      userId: 'u8',
+      userName: 'David Martinez',
+      rating: 5,
+      comment: 'Excellent trench coat! Great quality and perfect fit. Very versatile piece.',
+      date: '2024-01-11',
+      productId: '13',
+    },
+  ],
+  '14': [
+    {
+      id: 'r9',
+      userId: 'u9',
+      userName: 'Anna Thompson',
+      rating: 5,
+      comment: 'Beautiful silk blouse, feels luxurious. The quality is outstanding!',
+      date: '2024-01-13',
+      productId: '14',
+    },
+  ],
+  '15': [
+    {
+      id: 'r10',
+      userId: 'u10',
+      userName: 'Robert Davis',
+      rating: 4,
+      comment: 'Very cozy and warm cardigan. Perfect for layering. Great quality wool.',
+      date: '2024-01-10',
+      productId: '15',
+    },
+  ],
+  '16': [
+    {
+      id: 'r11',
+      userId: 'u11',
+      userName: 'Sophie White',
+      rating: 5,
+      comment: 'Love this skirt! The pleats are perfect and it sits beautifully. Highly recommend!',
+      date: '2024-01-12',
+      productId: '16',
+    },
+  ],
+  '17': [
+    {
+      id: 'r12',
+      userId: 'u12',
+      userName: 'Thomas Anderson',
+      rating: 5,
+      comment: 'Best suit I\'ve ever purchased. Perfect tailoring and professional look.',
+      date: '2024-01-14',
+      productId: '17',
+    },
+  ],
+  '18': [
+    {
+      id: 'r13',
+      userId: 'u13',
+      userName: 'Emma Wilson',
+      rating: 4,
+      comment: 'Beautiful scarf, lightweight and elegant. Perfect accessory!',
+      date: '2024-01-09',
+      productId: '18',
+    },
+  ],
+};
+

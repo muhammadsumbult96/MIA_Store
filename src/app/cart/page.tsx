@@ -5,9 +5,11 @@ import { useCart } from '@/hooks/useCart';
 import { CartItem } from '@/components/cart/CartItem';
 import { CartSummary } from '@/components/cart/CartSummary';
 import { Button } from '@/components/ui/Button';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function CartPage() {
   const { items, clearCart } = useCart();
+  const { t } = useLanguage();
 
   if (items.length === 0) {
     return (
@@ -26,11 +28,11 @@ export default function CartPage() {
               d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
             />
           </svg>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h1>
-          <p className="text-gray-600 mb-8">Looks like you haven't added anything to your cart yet.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('cart.empty')}</h1>
+          <p className="text-gray-600 mb-8">{t('cart.emptyDescription')}</p>
           <Link href="/products">
             <Button variant="primary" size="lg">
-              Continue Shopping
+              {t('cart.continueShopping')}
             </Button>
           </Link>
         </div>
@@ -41,9 +43,9 @@ export default function CartPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t('cart.title')}</h1>
         <Button variant="outline" onClick={clearCart} className="text-red-600 border-red-600 hover:bg-red-50">
-          Clear Cart
+          {t('cart.clearCart')}
         </Button>
       </div>
 
@@ -58,7 +60,7 @@ export default function CartPage() {
 
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
-            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('cart.orderSummary')}</h2>
             <CartSummary />
           </div>
         </div>

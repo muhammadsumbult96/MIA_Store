@@ -35,13 +35,13 @@ export function Header() {
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
-          <div className="flex justify-center px-8">
+          <div className="flex justify-center px-4">
             <Link href="/" className="text-2xl font-bold text-primary-900 tracking-tight">
               MÍA
             </Link>
           </div>
 
-          <div className="flex-1 max-w-md mx-4">
+          <div className="flex-1 max-w-2xl ml-0">
             <SearchBar />
           </div>
 

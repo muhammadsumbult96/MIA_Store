@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { sampleProducts, categories } from '@/lib/constants/products';
 import { useFilter } from '@/hooks/useFilter';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -12,6 +12,7 @@ import { formatPrice, formatVND } from '@/lib/utils/format';
 export default function ProductsPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { t, language } = useLanguage();
+  const productsContainerRef = useRef<HTMLDivElement>(null);
   const {
     filteredAndSortedProducts,
     filters,
@@ -23,12 +24,100 @@ export default function ProductsPage() {
     clearFilters,
   } = useFilter(sampleProducts);
 
+  // Helper function to scroll to products with offset
+  const scrollToProducts = () => {
+    setTimeout(() => {
+      if (productsContainerRef.current) {
+        const headerHeight = 64; // Header is h-16 (64px)
+        const offset = 120; // Extra offset to show product text
+        const elementPosition = productsContainerRef.current.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight - offset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  // Scroll to top when filters change
+  useEffect(() => {
+    scrollToProducts();
+  }, [filteredAndSortedProducts, sortOption]);
+
   const currency = language === 'vi' ? 'VND' : 'USD';
   const exchangeRate = 23000; // USD to VND
   const maxPrice = Math.max(...sampleProducts.map((p) => p.price));
   const minPrice = Math.min(...sampleProducts.map((p) => p.price));
   const displayMinPrice = currency === 'VND' ? formatVND(minPrice * exchangeRate) : formatPrice(minPrice);
   const displayMaxPrice = currency === 'VND' ? formatVND(maxPrice * exchangeRate) : formatPrice(maxPrice);
+  
+  // Predefined price ranges based on currency
+  const priceRanges = currency === 'VND' 
+    ? [
+        { value: '', label: t('products.allPrices') },
+        { value: '0-500000', label: 'Dưới 500.000đ' },
+        { value: '500000-1000000', label: '500.000đ - 1.000.000đ' },
+        { value: '1000000-2000000', label: '1.000.000đ - 2.000.000đ' },
+        { value: '2000000-5000000', label: '2.000.000đ - 5.000.000đ' },
+        { value: '5000000-', label: 'Trên 5.000.000đ' },
+      ]
+    : [
+        { value: '', label: t('products.allPrices') },
+        { value: '0-50', label: 'Under $50' },
+        { value: '50-100', label: '$50 - $100' },
+        { value: '100-200', label: '$100 - $200' },
+        { value: '200-300', label: '$200 - $300' },
+        { value: '300-', label: 'Above $300' },
+      ];
+
+  // Convert price range selection to min/max USD values
+  const handlePriceRangeChange = (rangeValue: string) => {
+    if (!rangeValue) {
+      updateFilter('minPrice', undefined);
+      updateFilter('maxPrice', undefined);
+      return;
+    }
+
+    const [minStr, maxStr] = rangeValue.split('-');
+    const minValue = minStr ? Number(minStr) : undefined;
+    const maxValue = maxStr ? Number(maxStr) : undefined;
+
+    // Convert from display currency to USD
+    const minUSD = minValue !== undefined 
+      ? (currency === 'VND' ? minValue / exchangeRate : minValue)
+      : undefined;
+    const maxUSD = maxValue !== undefined 
+      ? (currency === 'VND' ? maxValue / exchangeRate : maxValue)
+      : undefined;
+
+    updateFilter('minPrice', minUSD);
+    updateFilter('maxPrice', maxUSD);
+    scrollToProducts();
+  };
+
+  // Get current price range value from filters
+  const getCurrentPriceRange = (): string => {
+    if (filters.minPrice === undefined && filters.maxPrice === undefined) return '';
+    
+    const minDisplay = filters.minPrice !== undefined
+      ? (currency === 'VND' ? Math.round(filters.minPrice * exchangeRate) : filters.minPrice)
+      : 0;
+    const maxDisplay = filters.maxPrice !== undefined
+      ? (currency === 'VND' ? Math.round(filters.maxPrice * exchangeRate) : filters.maxPrice)
+      : undefined;
+
+    // Find matching range
+    const range = priceRanges.find(r => {
+      if (!r.value) return false;
+      const [rMinStr, rMaxStr] = r.value.split('-');
+      const rMin = rMinStr ? Number(rMinStr) : 0;
+      const rMax = rMaxStr ? Number(rMaxStr) : undefined;
+      
+      return minDisplay === rMin && maxDisplay === rMax;
+    });
+
+    return range?.value || '';
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -60,7 +149,10 @@ export default function ProductsPage() {
                   type="text"
                   placeholder={t('products.searchPlaceholder')}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
+                          scrollToProducts();
+                        }}
                 />
               </div>
 
@@ -71,7 +163,10 @@ export default function ProductsPage() {
                 <select
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   value={filters.category || ''}
-                  onChange={(e) => updateFilter('category', e.target.value)}
+                        onChange={(e) => {
+                          updateFilter('category', e.target.value);
+                          scrollToProducts();
+                        }}
                 >
                   <option value="">{t('products.allCategories')}</option>
                   {categories.map((category) => (
@@ -86,26 +181,19 @@ export default function ProductsPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   {t('products.priceRange')}
                 </label>
-                <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    placeholder={t('products.min')}
-                    value={filters.minPrice || ''}
-                    onChange={(e) =>
-                      updateFilter('minPrice', e.target.value ? Number(e.target.value) : undefined)
-                    }
-                  />
-                  <Input
-                    type="number"
-                    placeholder={t('products.max')}
-                    value={filters.maxPrice || ''}
-                    onChange={(e) =>
-                      updateFilter('maxPrice', e.target.value ? Number(e.target.value) : undefined)
-                    }
-                  />
-                </div>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  value={getCurrentPriceRange()}
+                  onChange={(e) => handlePriceRangeChange(e.target.value)}
+                >
+                  {priceRanges.map((range) => (
+                    <option key={range.value} value={range.value}>
+                      {range.label}
+                    </option>
+                  ))}
+                </select>
                 <p className="text-xs text-gray-500 mt-1">
-                  {displayMinPrice} - {displayMaxPrice}
+                  {t('products.priceRangeHint')}: {displayMinPrice} - {displayMaxPrice}
                 </p>
               </div>
 
@@ -116,9 +204,10 @@ export default function ProductsPage() {
                 <select
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   value={filters.minRating || ''}
-                  onChange={(e) =>
-                    updateFilter('minRating', e.target.value ? Number(e.target.value) : undefined)
-                  }
+                  onChange={(e) => {
+                    updateFilter('minRating', e.target.value ? Number(e.target.value) : undefined);
+                    scrollToProducts();
+                  }}
                 >
                   <option value="">{t('products.anyRating')}</option>
                   <option value="4">{t('products.rating4')}</option>
@@ -126,14 +215,21 @@ export default function ProductsPage() {
                 </select>
               </div>
 
-              <Button variant="outline" className="w-full" onClick={clearFilters}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  clearFilters();
+                  scrollToProducts();
+                }}
+              >
                 {t('products.clearFilters')}
               </Button>
             </div>
           </div>
         </aside>
 
-        <div className="flex-1">
+        <div className="flex-1" ref={productsContainerRef}>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
             <div className="flex items-center gap-4">
               <button
@@ -154,7 +250,10 @@ export default function ProductsPage() {
               <select
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 value={sortOption}
-                onChange={(e) => setSortOption(e.target.value as any)}
+                onChange={(e) => {
+                  setSortOption(e.target.value as any);
+                  scrollToProducts();
+                }}
               >
                 <option value="name-asc">{t('products.sortNameAsc')}</option>
                 <option value="name-desc">{t('products.sortNameDesc')}</option>
